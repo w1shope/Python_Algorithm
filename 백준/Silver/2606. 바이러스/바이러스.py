@@ -1,24 +1,22 @@
 import sys
 
-def dfs(start) :
-    global count;
-    visited[start] = True
-    for i in range(1, N+1) :
-        if(graph[start][i] == 1 and visited[i] == False) :
-            count += 1
-            dfs(i)
+def dfs(graph, start, visited) :
+    visited[start] = 1
+
+    for v in graph[start] :
+        if(visited[v] == 0) :
+            dfs(graph, v, visited)
 
 N = int(sys.stdin.readline())
 M = int(sys.stdin.readline())
 
-graph = [[0] * (N+1) for _ in range(N+1)]
-visited = [False] * (N+1)
-count = 0
+graph = [[] for _ in range(N+1)]
+visited = [0] * (N+1)
 
 for i in range(M) :
     v1, v2 = map(int, sys.stdin.readline().split())
-    graph[v1][v2] = 1
-    graph[v2][v1] = 1
+    graph[v1].append(v2)
+    graph[v2].append(v1)
 
-dfs(1)
-print(count)
+dfs(graph, 1, visited)
+print(sum(visited)-1)
